@@ -1,0 +1,20 @@
+# ── Synapse AI Arena ──────────────────────────────────────────────────────────
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Download TextBlob corpora
+RUN python -m textblob.download_corpora lite
+
+# Copy application code
+COPY . .
+
+EXPOSE 8501
+
+HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
+
+ENTRYPOINT ["streamlit", "run", "colosseum.py", "--server.port=8501", "--server.address=0.0.0.0"]

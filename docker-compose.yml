@@ -1,0 +1,34 @@
+# ── Synapse AI Arena – Docker Compose ─────────────────────────────────────────
+# Launch with:  docker compose up --build
+# Access Arena: http://localhost:8501
+# ──────────────────────────────────────────────────────────────────────────────
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # GPU pass-through (uncomment for NVIDIA GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
+
+  arena:
+    build: .
+    container_name: synapse-arena
+    ports:
+      - "8501:8501"
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    volumes:
+      - ./battle_history.json:/app/battle_history.json
+
+volumes:
+  ollama_data:
