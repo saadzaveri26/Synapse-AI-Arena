@@ -17,7 +17,7 @@ ollama:
     - gemma2
 
 judge:
-  model: "llama3"                         # Model used as the impartial judge
+  model: "qwen2.5"                        # Dedicated judge model (excluded from battle selection)
   system_prompt: "You are a fair and impartial judge."
 
 defaults:

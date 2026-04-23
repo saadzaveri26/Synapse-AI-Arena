@@ -53,7 +53,7 @@ def get_judge_verdict(
     response_a: str,
     model_b: str,
     response_b: str,
-    judge_model: str = "llama3",
+    judge_model: str = "qwen2.5",
     judge_system_prompt: str = "You are a fair and impartial judge.",
 ) -> ModelResponse:
     """

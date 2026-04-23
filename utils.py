@@ -112,11 +112,13 @@ def export_battle_pdf_bytes(
     pdf.set_font("Helvetica", "B", 12)
     pdf.cell(0, 8, "Prompt:", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 11)
-    pdf.multi_cell(0, 6, prompt)
+    clean_prompt = prompt.encode("latin-1", "replace").decode("latin-1")
+    pdf.multi_cell(0, 6, clean_prompt)
     pdf.ln(3)
 
     pdf.set_font("Helvetica", "I", 11)
-    pdf.cell(0, 8, f"Persona: {persona}", new_x="LMARGIN", new_y="NEXT")
+    clean_persona = persona.encode("latin-1", "replace").decode("latin-1")
+    pdf.cell(0, 8, f"Persona: {clean_persona}", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(4)
 
     # Model A

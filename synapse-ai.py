@@ -57,7 +57,15 @@ st.sidebar.title("⚙️ Battle Config")
 
 # Dynamic model listing
 fallback = cfg("ollama.fallback_models", ["llama3", "mistral", "gemma:2b"])
+judge_model_name = cfg("judge.model", "qwen2.5")
 available_models = list_available_models(fallback=fallback)
+
+# Filter out the dedicated judge model so it cannot be selected as a competitor
+# Compare base names (strip :tag suffix) to handle e.g. "qwen2.5:latest" vs "qwen2.5"
+def _base_name(model: str) -> str:
+    return model.split(":")[0]
+
+available_models = [m for m in available_models if _base_name(m) != _base_name(judge_model_name)]
 
 if not available_models:
     st.sidebar.error("No models found. Pull a model with `ollama pull <name>`.")
@@ -67,6 +75,10 @@ model_a = st.sidebar.selectbox("Model A", available_models, index=0)
 model_b = st.sidebar.selectbox(
     "Model B", available_models, index=min(1, len(available_models) - 1)
 )
+
+st.sidebar.markdown("---")
+st.sidebar.markdown(f"⚖️ **Judge Model:** `{judge_model_name}`")
+st.sidebar.caption("The judge is a dedicated model that cannot be selected as a competitor to ensure impartial evaluation.")
 
 st.sidebar.markdown("---")
 
